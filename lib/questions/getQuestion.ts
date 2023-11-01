@@ -1,4 +1,4 @@
-import { endpoint } from "@/utils/endpoint";
+import { endpoint } from "../../utils/endpoint";
 
 function removeCorrectField(jsonObj: any) {
   if (jsonObj && jsonObj.alternatives && Array.isArray(jsonObj.alternatives)) {
