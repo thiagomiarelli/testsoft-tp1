@@ -4,6 +4,7 @@ import { countCorrectQuestions } from '../lib/analytics';
 import { countIncorrectQuestions } from '../lib/analytics';
 import { percentOfCorrectOrIncorrectQuestions } from '../lib/analytics';
 import { countQuestionsBySubject } from '../lib/analytics';
+import { countQuestionsByStudentID } from '../lib/analytics';
 
 fetchMock.enableMocks();
 
@@ -164,3 +165,46 @@ it('should count the number of Geography questions', () => {
   const correctCount: number = countQuestionsBySubject(questions, 'Geography');
   expect(correctCount).toEqual(4);
 });
+
+
+it('should count questions by student ID', () => {
+  const mockQuestions = [
+    { id: '1', alternatives: [{ text: 'Alternative 1', correct: true }] },
+    { id: '1', alternatives: [{ text: 'Alternative 2', correct: false }] },
+    { id: '3', alternatives: [{ text: 'Alternative 3', correct: true }] },
+    { id: '4', alternatives: [{ text: 'Alternative 4', correct: false }] },
+    { id: '5', alternatives: [{ text: 'Alternative 5', correct: true }] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const questionsById: number = countQuestionsByStudentID(mockQuestions,'1');
+  expect(questionsById).toEqual(2);
+  });
+
+  it('should count questions by student ID with no questions', () => {
+  const mockQuestions = [
+    { id: '1', alternatives: [{ text: 'Alternative 1', correct: true }] },
+    { id: '1', alternatives: [{ text: 'Alternative 2', correct: false }] },
+    { id: '3', alternatives: [{ text: 'Alternative 3', correct: true }] },
+    { id: '4', alternatives: [{ text: 'Alternative 4', correct: false }] },
+    { id: '5', alternatives: [{ text: 'Alternative 5', correct: true }] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const questionsById: number = countQuestionsByStudentID(mockQuestions,'10');
+  expect(questionsById).toEqual(0);
+  });
+
+    it('should count questions by student ID with all questions done', () => {
+  const mockQuestions = [
+    { id: '1', alternatives: [{ text: 'Alternative 1', correct: true }] },
+    { id: '1', alternatives: [{ text: 'Alternative 2', correct: false }] },
+    { id: '1', alternatives: [{ text: 'Alternative 3', correct: true }] },
+    { id: '1', alternatives: [{ text: 'Alternative 4', correct: false }] },
+    { id: '1', alternatives: [{ text: 'Alternative 5', correct: true }] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const questionsById: number = countQuestionsByStudentID(mockQuestions,'1');
+  expect(questionsById).toEqual(5);
+  });

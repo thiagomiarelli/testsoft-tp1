@@ -27,11 +27,15 @@ export function percentOfCorrectOrIncorrectQuestions(answers: string[], criterio
   }
 }
 
-
 export function countIncorrectQuestions(questions: string[]){
   return questions.filter((questions) => questions === 'incorrect').length;
 }
 
 export function countQuestionsBySubject(questions: string[], criterion: string){
   return questions.filter((question) => question === criterion).length;
+}
+
+
+export function countQuestionsByStudentID(questions: { id: string; alternatives: { text: string; correct: boolean }[] }[], id: string){
+  return questions.filter((question) => question.id === id).length;
 }
