@@ -32,6 +32,6 @@ export function countIncorrectQuestions(questions: string[]){
   return questions.filter((questions) => questions === 'incorrect').length;
 }
 
-export function countQuestionsBysubjectSubject(questions: string[], criterion: string){
+export function countQuestionsBySubject(questions: string[], criterion: string){
   return questions.filter((question) => question === criterion).length;
 }
