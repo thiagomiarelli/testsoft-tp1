@@ -39,3 +39,34 @@ export function countQuestionsBySubject(questions: string[], criterion: string){
 export function countQuestionsByStudentID(questions: { id: string; alternatives: { text: string; correct: boolean }[] }[], id: string){
   return questions.filter((question) => question.id === id).length;
 }
+
+
+export function findIDHighestScore(score:  {id: string; scores: number []} []): string {
+  let maxScore = 0;
+  let maxId = '';
+
+  for (const question of score) {
+    const totalScore = question.scores.reduce((a, b) => a + b, 0);
+    if (totalScore > maxScore) {
+      maxScore = totalScore;
+      maxId = question.id;
+    }
+  }
+
+  return maxId;
+}
+
+export function findHighestScore(score:  {id: string; scores: number []} []): number {
+  let maxScore = 0;
+  let maxId = '';
+
+  for (const question of score) {
+    const totalScore = question.scores.reduce((a, b) => a + b, 0);
+    if (totalScore > maxScore) {
+      maxScore = totalScore;
+      maxId = question.id;
+    }
+  }
+
+  return maxScore;
+}

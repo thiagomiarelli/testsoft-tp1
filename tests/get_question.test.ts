@@ -5,6 +5,8 @@ import { countIncorrectQuestions } from '../lib/analytics';
 import { percentOfCorrectOrIncorrectQuestions } from '../lib/analytics';
 import { countQuestionsBySubject } from '../lib/analytics';
 import { countQuestionsByStudentID } from '../lib/analytics';
+import { findIDHighestScore } from '../lib/analytics';
+import { findHighestScore } from '../lib/analytics';
 
 fetchMock.enableMocks();
 
@@ -208,3 +210,68 @@ it('should count questions by student ID', () => {
   const questionsById: number = countQuestionsByStudentID(mockQuestions,'1');
   expect(questionsById).toEqual(5);
   });
+
+
+  it('find the ID with Highest Score', () => {
+  const mockQuestions = [
+    { id: '1', scores: [100,80,95] },
+    { id: '2', scores: [70,40,80] },
+    { id: '3', scores: [50,50,50] },
+    { id: '4', scores: [40,10,30] },
+    { id: '5', scores: [10,20,30] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const HighestScoreID: string = findIDHighestScore(mockQuestions);
+  expect(HighestScoreID).toEqual('1');
+  });
+
+
+    it('find the ID with Highest Score with all scores equal to 0', () => {
+  const mockQuestions = [
+    { id: '1', scores: [0] },
+    { id: '2', scores: [0] },
+    { id: '3', scores: [0] },
+    { id: '4', scores: [0] },
+    { id: '5', scores: [0] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const HighestScoreID: string = findIDHighestScore(mockQuestions);
+  expect(HighestScoreID).toEqual('');
+  });
+
+
+  it('find the Highest Score', () => {
+  const mockQuestions = [
+    { id: '1', scores: [100,80,95] },
+    { id: '2', scores: [70,40,80] },
+    { id: '3', scores: [50,50,50] },
+    { id: '4', scores: [40,10,30] },
+    { id: '5', scores: [10,20,30] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const HighestScore: number = findHighestScore(mockQuestions);
+  expect(HighestScore).toEqual(275);
+  });
+
+
+
+  it('find the Highest Score with all scores equal to 0', () => {
+  const mockQuestions = [
+    { id: '1', scores: [0,0] },
+    { id: '2', scores: [0] },
+    { id: '3', scores: [0,0,0] },
+    { id: '4', scores: [0] },
+    { id: '5', scores: [0,0,0,0,0] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const HighestScore: number = findHighestScore(mockQuestions);
+  expect(HighestScore).toEqual(0);
+  });
+
+
+
+  
