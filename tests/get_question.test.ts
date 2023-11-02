@@ -9,6 +9,8 @@ import { findIDHighestScore } from '../lib/analytics';
 import { findHighestScore } from '../lib/analytics';
 import { calculateAverageScoreById } from '../lib/analytics';
 import { calculateStandardDeviationById } from '../lib/analytics';
+import { countAnswersByQuestion } from '../lib/analytics';
+
 
 fetchMock.enableMocks();
 
@@ -281,8 +283,8 @@ it('should count questions by student ID', () => {
   ];
 
   fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
-  const HighestScore: number = calculateAverageScoreById(mockQuestions,'1');
-  expect(HighestScore).toEqual(10);
+  const averageScore: number = calculateAverageScoreById(mockQuestions,'1');
+  expect(averageScore).toEqual(10);
   });
 
 
@@ -292,8 +294,8 @@ it('should count questions by student ID', () => {
   ];
 
   fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
-  const HighestScore: number = calculateAverageScoreById(mockQuestions,'1');
-  expect(HighestScore).toEqual(0);
+  const averageScore: number = calculateAverageScoreById(mockQuestions,'1');
+  expect(averageScore).toEqual(0);
   });
 
 
@@ -302,6 +304,7 @@ it('should count questions by student ID', () => {
     { id: '1', scores: [10, 10, 10] },
   ];
 
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
   const standardDeviation = calculateStandardDeviationById(mockQuestions,'1');
   expect(standardDeviation).toEqual(0);
 });
@@ -312,6 +315,7 @@ it('should count questions by student ID', () => {
     { id: '1', scores: [10, 20, 30] },
   ];
 
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
   const standardDeviation = calculateStandardDeviationById(mockQuestions,'1');
   expect(standardDeviation).toEqual(8.16496580927726);
 });
@@ -322,6 +326,30 @@ it('should count questions by student ID', () => {
     { id: '1', scores: [0,0,0] },
   ];
 
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
   const standardDeviation = calculateStandardDeviationById(mockQuestions,'1');
   expect(standardDeviation).toEqual(0);
 });
+
+
+  it('should count the answers by question', () => {
+  const mockQuestions = [
+    { question_id: '1', answers: ['A','A','B','D']  },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const totalQuestions: number = countAnswersByQuestion(mockQuestions,'1');
+  expect(totalQuestions).toEqual(4);
+  });
+
+
+
+  it('should count the answers by question in a question with 0 answers', () => {
+  const mockQuestions = [
+    { question_id: '1', answers: []},
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const totalQuestions: number = countAnswersByQuestion(mockQuestions,'1');
+  expect(totalQuestions).toEqual(0);
+  });

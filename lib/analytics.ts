@@ -95,3 +95,13 @@ export function calculateStandardDeviationById(scores: { id: string; scores: num
 
   return Math.sqrt(variance);
 }
+
+
+export function countAnswersByQuestion(questions: { question_id: string; answers: string[] }[], id: string): number {
+  const question = questions.find(question => question.question_id === id);
+  if (!question) {
+    throw new Error(`No question found for ID ${id}`);
+  }
+
+  return question.answers.length;
+}
