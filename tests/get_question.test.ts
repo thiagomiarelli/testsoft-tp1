@@ -3,7 +3,7 @@ import fetchMock from 'jest-fetch-mock';
 import { countCorrectQuestions } from '../lib/analytics';
 import { countIncorrectQuestions } from '../lib/analytics';
 import { percentOfCorrectOrIncorrectQuestions } from '../lib/analytics';
-import { countQuestionsBysubjectSubject } from '../lib/analytics';
+import { countQuestionsBySubject } from '../lib/analytics';
 
 fetchMock.enableMocks();
 
@@ -137,30 +137,30 @@ it('should count incorrect answers correctly', () => {
 
 it('should count the number of Math questions', () => {
   const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
-  const correctCount: number = countQuestionsBysubjectSubject(questions,'Math');
+  const correctCount: number = countQuestionsBySubject(questions,'Math');
   expect(correctCount).toEqual(1);
 });
 
 it('should count the number of History questions', () => {
   const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
-  const correctCount: number = countQuestionsBysubjectSubject(questions, 'History');
+  const correctCount: number = countQuestionsBySubject(questions, 'History');
   expect(correctCount).toEqual(2);
 });
 
 it('should count the number of English questions', () => {
   const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
-  const correctCount: number = countQuestionsBysubjectSubject(questions, 'English');
+  const correctCount: number = countQuestionsBySubject(questions, 'English');
   expect(correctCount).toEqual(1);
 });
 
 it('should count the number of Chemical questions', () => {
   const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
-  const correctCount: number = countQuestionsBysubjectSubject(questions, 'Chemical');
+  const correctCount: number = countQuestionsBySubject(questions, 'Chemical');
   expect(correctCount).toEqual(0);
 });
 
 it('should count the number of Geography questions', () => {
   const questions: string[] = ['Geography', 'Geography', 'Geography', 'Geography', 'Portuguese'];
-  const correctCount: number = countQuestionsBysubjectSubject(questions, 'Geography');
+  const correctCount: number = countQuestionsBySubject(questions, 'Geography');
   expect(correctCount).toEqual(4);
 });
