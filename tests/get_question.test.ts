@@ -1,5 +1,9 @@
 import { getQuestion } from '../lib/questions/getQuestion'; // replace with your file name
 import fetchMock from 'jest-fetch-mock';
+import { countCorrectQuestions } from '../lib/analytics';
+import { countIncorrectQuestions } from '../lib/analytics';
+import { percentOfCorrectOrIncorrectQuestions } from '../lib/analytics';
+import { countQuestionsBysubjectSubject } from '../lib/analytics';
 
 fetchMock.enableMocks();
 
@@ -93,3 +97,70 @@ it('shouldnt remove other fields from alternatives', async () => {
 });
 
 // Add more tests as needed
+it('should count correct answers correctly', () => {
+  const answers: string[] = ['correct', 'incorrect', 'correct', 'correct', 'incorrect'];
+  const correctCount: number = countCorrectQuestions(answers);
+  expect(correctCount).toEqual(3);
+});
+
+
+it('calculate the percentage of correct answers', () => {
+  const answers: string[] = ['correct', 'incorrect', 'correct', 'correct', 'incorrect'];
+  const correctCount: number = percentOfCorrectOrIncorrectQuestions(answers,'correct');
+  expect(correctCount).toEqual(60);
+});
+
+it('calculate the percentage of incorrect answers', () => {
+  const answers: string[] = ['correct', 'incorrect', 'correct', 'correct', 'incorrect'];
+  const correctCount: number = percentOfCorrectOrIncorrectQuestions(answers,'incorrect');
+  expect(correctCount).toEqual(40);
+});
+
+it('calculate the percentage of incorrect answers when all answers is correct', () => {
+  const answers: string[] = ['correct', 'correct', 'correct', 'correct', 'correct'];
+  const correctCount: number = percentOfCorrectOrIncorrectQuestions(answers,'incorrect');
+  expect(correctCount).toEqual(0);
+});
+
+
+it('calculate the percentage of incorrect answers when answers were not given', () => {
+  const answers: string[] = [];
+  const correctCount: number = percentOfCorrectOrIncorrectQuestions(answers,'incorrect');
+  expect(correctCount).toEqual(0);
+});
+
+it('should count incorrect answers correctly', () => {
+  const answers: string[] = ['correct', 'incorrect', 'correct', 'correct', 'incorrect'];
+  const correctCount: number = countIncorrectQuestions(answers);
+  expect(correctCount).toEqual(2);
+});
+
+it('should count the number of Math questions', () => {
+  const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
+  const correctCount: number = countQuestionsBysubjectSubject(questions,'Math');
+  expect(correctCount).toEqual(1);
+});
+
+it('should count the number of History questions', () => {
+  const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
+  const correctCount: number = countQuestionsBysubjectSubject(questions, 'History');
+  expect(correctCount).toEqual(2);
+});
+
+it('should count the number of English questions', () => {
+  const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
+  const correctCount: number = countQuestionsBysubjectSubject(questions, 'English');
+  expect(correctCount).toEqual(1);
+});
+
+it('should count the number of Chemical questions', () => {
+  const questions: string[] = ['Math', 'History', 'History', 'English', 'Portuguese'];
+  const correctCount: number = countQuestionsBysubjectSubject(questions, 'Chemical');
+  expect(correctCount).toEqual(0);
+});
+
+it('should count the number of Geography questions', () => {
+  const questions: string[] = ['Geography', 'Geography', 'Geography', 'Geography', 'Portuguese'];
+  const correctCount: number = countQuestionsBysubjectSubject(questions, 'Geography');
+  expect(correctCount).toEqual(4);
+});
