@@ -7,6 +7,8 @@ import { countQuestionsBySubject } from '../lib/analytics';
 import { countQuestionsByStudentID } from '../lib/analytics';
 import { findIDHighestScore } from '../lib/analytics';
 import { findHighestScore } from '../lib/analytics';
+import { calculateAverageScoreById } from '../lib/analytics';
+import { calculateStandardDeviationById } from '../lib/analytics';
 
 fetchMock.enableMocks();
 
@@ -273,5 +275,53 @@ it('should count questions by student ID', () => {
   });
 
 
+  it('calculate the average score by id', () => {
+  const mockQuestions = [
+    { id: '1', scores: [10,5,15] },
+  ];
 
-  
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const HighestScore: number = calculateAverageScoreById(mockQuestions,'1');
+  expect(HighestScore).toEqual(10);
+  });
+
+
+  it('calculate the average score by id with score 0 ', () => {
+  const mockQuestions = [
+    { id: '1', scores: [0] },
+  ];
+
+  fetchMock.mockResponseOnce(JSON.stringify([mockQuestions]));
+  const HighestScore: number = calculateAverageScoreById(mockQuestions,'1');
+  expect(HighestScore).toEqual(0);
+  });
+
+
+  it('calculate the standard deviation by id with equal scores', () => {
+  const mockQuestions = [
+    { id: '1', scores: [10, 10, 10] },
+  ];
+
+  const standardDeviation = calculateStandardDeviationById(mockQuestions,'1');
+  expect(standardDeviation).toEqual(0);
+});
+
+
+  it('calculate the standard deviation by id with different scores', () => {
+  const mockQuestions = [
+    { id: '1', scores: [10, 20, 30] },
+  ];
+
+  const standardDeviation = calculateStandardDeviationById(mockQuestions,'1');
+  expect(standardDeviation).toEqual(8.16496580927726);
+});
+
+
+  it('calculate the standard deviation by id with scores equal to 0', () => {
+  const mockQuestions = [
+    { id: '1', scores: [0,0,0] },
+  ];
+
+  const standardDeviation = calculateStandardDeviationById(mockQuestions,'1');
+  expect(standardDeviation).toEqual(0);
+});

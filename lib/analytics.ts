@@ -70,3 +70,28 @@ export function findHighestScore(score:  {id: string; scores: number []} []): nu
 
   return maxScore;
 }
+
+export function calculateAverageScoreById(scores: { id: string; scores: number[] }[], id: string): number {
+  const score = scores.find(score => score.id === id);
+  if (!score) {
+    throw new Error(`No scores found for ID ${id}`);
+  }
+
+  const totalScore = score.scores.reduce((a, b) => a + b, 0);
+  const averageScore = totalScore / score.scores.length;
+
+  return averageScore;
+}
+
+
+export function calculateStandardDeviationById(scores: { id: string; scores: number[] }[], id: string): number {
+  const score = scores.find(score => score.id === id);
+  if (!score) {
+    throw new Error(`No scores found for ID ${id}`);
+  }
+
+  const averageScore = calculateAverageScoreById(scores, id);
+  const variance = score.scores.reduce((acc, curr) => acc + Math.pow(curr - averageScore, 2), 0) / score.scores.length;
+
+  return Math.sqrt(variance);
+}
